@@ -9,7 +9,26 @@ const router = require('./routes');
 const fs = require('fs')
 const data = fs.readFileSync('./api.yaml', 'utf-8');
 const file = yaml.parse(data); 
+const Sentry = require("@sentry/node")
 
+const {
+    SENTRY_DSN,
+    ENVIRONMENT
+} = process.env
+
+Sentry.init({
+    environment: ENVIRONMENT,
+    dsn: "https://e22e9f73816c4e33ba69ed99e13fddac@o4505210792706048.ingest.sentry.io/4505223795245056",
+    integrations: [
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Sentry.Integrations.Express({ app }),
+      ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+    ],
+    tracesSampleRate: 1.0,
+  });
+
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 app.use(cors())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(file))
@@ -17,12 +36,16 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(router);
 
+// Sentry error handler
+app.use(Sentry.Handlers.errorHandler());
+
 // 404 
 app.use((req, res, next) => {
     return res.status(404).json({
         message: "404 Not Found!"
     });
 });
+
 
 // 500
 app.use((err, req, res, next) => {

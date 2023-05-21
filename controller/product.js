@@ -6,7 +6,7 @@ module.exports = {
       const products = await Product.findAll();
       return res.status(200).json({
         status: true,
-        message: "success",
+        message: "Show all product success",
         data: products,
       });
     } catch (error) {
@@ -14,7 +14,7 @@ module.exports = {
     }
   },
 
- showDetail: async (req, res, next) => {
+  showDetail: async (req, res, next) => {
     try {
       const { product_id } = req.params;
 
@@ -23,14 +23,14 @@ module.exports = {
       if (!product) {
         return res.status(404).json({
           status: false,
-          message: `can't find product with id ${product_id}!`,
+          message: `can't find product with id, product id not found!`,
           data: null,
         });
       }
 
       return res.status(200).json({
         status: true,
-        message: "success",
+        message: "get detail product id success",
         data: product,
       });
     } catch (error) {
@@ -41,6 +41,15 @@ module.exports = {
   store: async (req, res, next) => {
     try {
       const { name, quantity } = req.body;
+
+      const exist = await Product.findOne({ where: { name } });
+
+      if (exist) {
+        return res.status(400).json({
+          status: false,
+          message: "name already exist",
+        });
+      }
 
       const product = await Product.create({
         name: name,
@@ -69,14 +78,14 @@ module.exports = {
       if (updated[0] == 0) {
         return res.status(404).json({
           status: false,
-          message: `can't find product with id ${product_id}!`,
+          message: `can't find product with id product!`,
           data: null,
         });
       }
 
-      return res.status(201).json({
+      return res.status(200).json({
         status: true,
-        message: "success",
+        message: "update product with id success",
         data: null,
       });
     } catch (error) {
@@ -86,23 +95,23 @@ module.exports = {
 
   destroy: async (req, res, next) => {
     try {
-        const {product_id} = req.params
+      const { product_id } = req.params;
 
-        const deleted = await Product.destroy({where:{id: product_id}})
+      const deleted = await Product.destroy({ where: { id: product_id } });
 
-        if (!deleted){
-            return res.status(404).json({
-                status:  false,
-                message:`can't find product with id ${product_id}!`,
-                data: null
-            })
-        }
-    
-        return res.status(200).json({
-            status: true,
-            message:"success",
-            data : null
-        })
+      if (!deleted) {
+        return res.status(404).json({
+          status: false,
+          message: `can't find product with product id!`,
+          data: null,
+        });
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "success",
+        data: null,
+      });
     } catch (error) {
       next(error);
     }

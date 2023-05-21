@@ -6,7 +6,7 @@ module.exports = {
       const suppliers = await Supplier.findAll();
       return res.status(200).json({
         status: true,
-        message: "success",
+        message: "Show all supplier success",
         data: suppliers,
       });
     } catch (error) {
@@ -23,14 +23,14 @@ module.exports = {
       if (!supplier) {
         return res.status(404).json({
           status: false,
-          message: `can't find supplier with id ${supplier_id}!`,
+          message: `can't find supplier with id, supplier id not found!`,
           data: null,
         });
       }
 
       return res.status(200).json({
         status: true,
-        message: "success",
+        message: "get detail supplier id success",
         data: supplier,
       });
     } catch (error) {
@@ -42,6 +42,15 @@ module.exports = {
     try {
       const { name, address } = req.body;
 
+      const exist = await Supplier.findOne({ where: { name } });
+
+      if (exist) {
+        return res.status(400).json({
+          status: false,
+          message: "name already exist",
+        });
+      }
+      
       const supplier = await Supplier.create({
         name: name,
         address: address,
@@ -59,7 +68,6 @@ module.exports = {
 
   update: async (req, res, next) => {
     try {
-
       const { supplier_id } = req.params;
 
       const updated = await Supplier.update(req.body, {
@@ -69,7 +77,7 @@ module.exports = {
       if (updated[0] == 0) {
         return res.status(404).json({
           status: false,
-          message: `can't find supplier with id ${supplier_id}!`,
+          message: `can't find supplier with id supplier!`,
           data: null,
         });
       }
@@ -77,7 +85,7 @@ module.exports = {
       //   return response
       return res.status(201).json({
         status: true,
-        message: "update success",
+        message: "update supplier with id success",
         data: null,
       });
     } catch (error) {
@@ -87,23 +95,23 @@ module.exports = {
 
   destroy: async (req, res, next) => {
     try {
-        const {supplier_id} = req.params
+      const { supplier_id } = req.params;
 
-        const deleted = await Supplier.destroy({where:{id: supplier_id}})
+      const deleted = await Supplier.destroy({ where: { id: supplier_id } });
 
-        if (!deleted){
-            return res.status(404).json({
-                status:  false,
-                message:`can't find supplier with id ${supplier_id}!`,
-                data: null
-            })
-        }
-    
-        return res.status(200).json({
-            status: true,
-            message:"success",
-            data : null
-        })
+      if (!deleted) {
+        return res.status(404).json({
+          status: false,
+          message: `can't find supplier with supplier id!`,
+          data: null,
+        });
+      }
+
+      return res.status(200).json({
+        status: true,
+        message: "success",
+        data: null,
+      });
     } catch (error) {
       next(error);
     }

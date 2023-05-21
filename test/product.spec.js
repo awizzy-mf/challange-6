@@ -1,19 +1,19 @@
 const supertest = require("supertest");
 const app = require("../app");
 
-const component = {
+const product = {
   id: "",
-  name: "RAM Corsair 5",
-  description: "Ram Corsair 1",
+  name: "RAM Corsair",
+  quantity: 1,
 };
 
-// create component
-describe("TEST POST /components endpoint", () => {
+// create product
+describe("TEST POST /products endpoint", () => {
   // positive
-  test("create success : success create component", () => {
+  test("create success : success create product", () => {
     return supertest(app)
-      .post("/components")
-      .send(component)
+      .post("/products")
+      .send(product)
       .then((res) => {
         expect(res.statusCode).toBe(201);
         expect(res.body).toHaveProperty("status");
@@ -21,18 +21,18 @@ describe("TEST POST /components endpoint", () => {
         expect(res.body).toHaveProperty("data");
         expect(res.body.data).toHaveProperty("id");
         expect(res.body.data).toHaveProperty("name");
-        expect(res.body.data).toHaveProperty("description");
+        expect(res.body.data).toHaveProperty("quantity");
         expect(res.body.status).toBe(true);
         expect(res.body.message).toBe("success");
 
-        component.id = res.body.data.id;
+        product.id = res.body.data.id;
       });
   });
 //   negative
-  test("create component: failed to create component because it has already been made", () => {
+  test("create product: failed to create product because it has already been made", () => {
     return supertest(app)
-      .post("/components")
-      .send(component)
+      .post("/products")
+      .send(product)
       .then((res) => {
         expect(res.statusCode).toBe(400);
         expect(res.body).toHaveProperty("status");
@@ -43,26 +43,27 @@ describe("TEST POST /components endpoint", () => {
       });
   });
 
-  describe("TEST /components endpoint", () =>{
-    test("Get All component", () =>{
+// showAll
+  describe("TEST /products endpoint", () =>{
+    test("Get All product", () =>{
         return supertest(app)
-        .get("/components")
+        .get("/products")
         .then(res => {
             expect(res.statusCode).toBe(200)
             expect(res.body).toHaveProperty("status")
             expect(res.body).toHaveProperty("message")
             expect(res.body).toHaveProperty("data")
             expect(res.body.status).toBe(true)
-            expect(res.body.message).toBe("Show all Component success")
+            expect(res.body.message).toBe("Show all product success")
         })
     })
   })
-// getById component
-describe('TEST get by id /components/:component_id endpoint', () => {
+// get By Id product
+describe('TEST get by id /products/:product_id endpoint', () => {
     // positive
-    test('get by id : component_id', () => {
+    test('get by id : product_id', () => {
         return supertest(app)
-            .get("/components/" + component.id)
+            .get("/products/" + product.id)
             .then(res => {
                 expect(res.statusCode).toBe(200);
                 expect(res.body).toHaveProperty('status');
@@ -70,58 +71,58 @@ describe('TEST get by id /components/:component_id endpoint', () => {
                 expect(res.body).toHaveProperty('data');
                 expect(res.body.data).toHaveProperty('id');
                 expect(res.body.data).toHaveProperty('name');
-                expect(res.body.data).toHaveProperty('description');
+                expect(res.body.data).toHaveProperty('quantity');
                 expect(res.body.status).toBe(true);
-                expect(res.body.message).toBe('get detail component id success');
+                expect(res.body.message).toBe('get detail product id success');
             });
     });
 });
 
  //negative
- test('TEST Get By Id : component_id not found', () => {
+ test('TEST Get By Id : product_id not found', () => {
     return supertest(app)
-        .get('/components/99999')
+        .get('/products/99999')
         .then(res => {
             expect(res.statusCode).toBe(404);
             expect(res.body).toHaveProperty('status');
             expect(res.body).toHaveProperty('message');
             expect(res.body.status).toBe(false);
-            expect(res.body.message).toBe(`can't find component with id, component id not found!`);
+            expect(res.body.message).toBe(`can't find product with id, product id not found!`);
         });
 });
-// update component
-describe('TEST UPDATE /components/:component_id', () => {
+// update product
+describe('TEST UPDATE /products/:product_id', () => {
     // positive
-    test('update component with id', () => {
+    test('update product with id', () => {
         return supertest(app)
-            .put(`/components/` + component.id)
-            .send({ name : "RAM Corsair 2"})
+            .put(`/products/` + product.id)
+            .send({ quantity : 2})
             .then(res => {
                 expect(res.statusCode).toBe(200);
                 expect(res.body).toHaveProperty('status');
                 expect(res.body).toHaveProperty('message');
                 expect(res.body.status).toBe(true);
-                expect(res.body.message).toBe('update component with id success');
+                expect(res.body.message).toBe('update product with id success');
             });
     });
 })
 //negative
 test('update failed', () => {
     return supertest(app)
-        .put('/components/9999')
+        .put('/products/9999')
         .then(res => {
             expect(res.statusCode).toBe(404);
             expect(res.body).toHaveProperty('status');
             expect(res.body).toHaveProperty('message');
             expect(res.body.status).toBe(false);
-            expect(res.body.message).toBe("can't find component with id component!");
+            expect(res.body.message).toBe("can't find product with id product!");
         });
 });
-describe('TEST DELETE /components/:component_id', () => {
+describe('TEST DELETE /products/:product_id', () => {
     // positive
-    test('delete component with component id', () => {
+    test('delete product with product id', () => {
         return supertest(app)
-            .delete(`/components/` + component.id)
+            .delete(`/products/` + product.id)
             .then(res => {
                 expect(res.statusCode).toBe(200);
                 expect(res.body).toHaveProperty('status');
@@ -132,15 +133,15 @@ describe('TEST DELETE /components/:component_id', () => {
     });
 });
 //negative
-test('delete failed :  not correct component_id', () => {
+test('delete failed :  not correct product_id', () => {
     return supertest(app)
-        .delete('/components/9999')
+        .delete('/products/9999')
         .then(res => {
             expect(res.statusCode).toBe(404);
             expect(res.body).toHaveProperty('status');
             expect(res.body).toHaveProperty('message');
             expect(res.body.status).toBe(false);
-            expect(res.body.message).toBe("can't find component with component id!");
+            expect(res.body.message).toBe("can't find product with product id!");
         });
 });
 })
