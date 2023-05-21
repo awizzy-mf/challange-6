@@ -10,7 +10,7 @@ module.exports = {
         data: components,
       });
     } catch (error) {
-      next(err);
+      throw error;
     }
   },
 
@@ -36,7 +36,7 @@ module.exports = {
         data: component,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 
@@ -64,7 +64,7 @@ module.exports = {
         data: component,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 
@@ -91,7 +91,7 @@ module.exports = {
         data: null,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 
@@ -115,7 +115,7 @@ module.exports = {
         data: null,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 };

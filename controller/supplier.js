@@ -10,7 +10,7 @@ module.exports = {
         data: suppliers,
       });
     } catch (error) {
-      next(err);
+      throw error;
     }
   },
 
@@ -34,7 +34,7 @@ module.exports = {
         data: supplier,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 
@@ -50,7 +50,7 @@ module.exports = {
           message: "name already exist",
         });
       }
-      
+
       const supplier = await Supplier.create({
         name: name,
         address: address,
@@ -62,7 +62,7 @@ module.exports = {
         data: supplier,
       });
     } catch (error) {
-      next(error);
+      throw error;
     }
   },
 
