@@ -1,0 +1,30 @@
+//endpoint components, products, suppliers
+
+GET http://localhost:8000
+
+### get all data product
+GET http://localhost:8000/components
+
+### Get detail products
+GET http://localhost:8000/products/7
+
+### Create data products
+POST http://localhost:8000/components
+Content-Type: application/json
+
+{
+    "name": "RAM Corsair",
+    "description": "DDR 4 - 4GB"
+}
+
+### Update data product
+PUT http://localhost:8000/suppliers/6
+Content-Type: application/json
+
+{
+     "name": "Ganti Nama supplier",
+     "address": "ganti alamat supplier"
+}
+
+### Delete data product
+DELETE  http://localhost:8000/suppliers/4
