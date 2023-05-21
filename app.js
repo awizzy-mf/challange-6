@@ -18,7 +18,7 @@ const {
 
 Sentry.init({
     environment: ENVIRONMENT,
-    dsn: "https://e22e9f73816c4e33ba69ed99e13fddac@o4505210792706048.ingest.sentry.io/4505223795245056",
+    dsn: SENTRY_DSN,
     integrations: [
       new Sentry.Integrations.Http({ tracing: true }),
       new Sentry.Integrations.Express({ app }),
