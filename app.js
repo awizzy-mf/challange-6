@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 8000;
+// const port = 8000;
 const cors = require('cors')
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
@@ -31,4 +31,5 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(port, () => console.log('listening on port ', port));
+// app.listen(port, () => console.log('listening on port ', port));
+module.exports = app
